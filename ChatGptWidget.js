@@ -93,11 +93,14 @@
             "Authorization": "Bearer " + apiKey
           },
           body: JSON.stringify({
-            "model": "text-davinci-002",
-            "prompt": prompt,
-            "max_tokens": parseInt(max_tokens),
-            "n": 1,
-            "temperature": 0.5
+            model: "gpt-4o-mini",
+            messages: [
+               { role: "system", content: "You are a helpful strategic management assistant." },
+               { role: "user", content: prompt }
+            ],
+            max_tokens: parseInt(max_tokens),
+            n: 1,
+            temperature: 0.5
           })
         });
         const {
@@ -117,5 +120,5 @@
       this.initMain();
     }
   }
-  customElements.define("com-rohitchouhan-sap-chatgptwidget", Widget);
+  customElements.define("com-jcamacho-sap-chatgptwidget", Widget);
 })();
