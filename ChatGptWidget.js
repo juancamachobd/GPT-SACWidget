@@ -102,9 +102,7 @@
             n: 1,
             temperature: 0.8
           })
-          console.log('Response:', response);
-        });
-        
+        });        
         const data = await response.json();
         console.log('API Response:', data);
         if (data.choices && data.choices.length > 0) {
