@@ -99,11 +99,14 @@
                { role: "user", content: prompt }
             ],
             max_tokens: parseInt(max_tokens),
-            n: 10,
-            temperature: 0.5
+            n: 1,
+            temperature: 0.8
           })
+          console.log('Response:', response);
         });
+        
         const data = await response.json();
+        console.log('API Response:', data);
         if (data.choices && data.choices.length > 0) {
           const generatedTextValue = data.choices[0].message.content;
           const processedText = generatedTextValue.replace(/\n/g, '');
