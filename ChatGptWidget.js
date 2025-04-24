@@ -99,15 +99,18 @@
                { role: "user", content: prompt }
             ],
             max_tokens: parseInt(max_tokens),
-            n: 1,
+            n: 10,
             temperature: 0.5
           })
         });
-        const {
-          choices
-        } = await response.json();
-        const generatedTextValue = choices[0].text;
-        generatedText.value = generatedTextValue.replace(/^\n+/, '');
+        const data = await response.json();
+        if (data.choices && data.choices.length > 0) {
+          const generatedTextValue = data.choices[0].message.content;
+          const processedText = generatedTextValue.replace(/\n/g, '');
+          // Use processedText as needed
+        } else {
+          console.error('No choices in response');
+        }        
       });
     }
     onCustomWidgetBeforeUpdate(changedProperties) {
