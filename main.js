@@ -38,7 +38,7 @@ const url = "https://api.openai.com/v1/chat/completions";
       <div id="root" style="width: 100%; height: 100%;">
       </div>
     `;
-  class MainWebComponent extends HTMLElement {
+  class ChatGPTWidget extends HTMLElement {
     async post(apiKey, endpoint, prompt) {
       const { response } = await ajaxCall(
         apiKey,
@@ -49,6 +49,6 @@ const url = "https://api.openai.com/v1/chat/completions";
       return response.choices[0].text;
     }
   }
-  customElements.define("custom-widget", MainWebComponent);
+  customElements.define("custom-widget", ChatGPTWidget);
 })();
 Explain
