@@ -82,10 +82,16 @@
       } = this._props || 1024;
       const generateButton = this.shadowRoot.getElementById("generate-button");
       generateButton.addEventListener("click", async () => {
-        const promptInput = this.shadowRoot.getElementById("prompt-input");
-        const generatedText = this.shadowRoot.getElementById("generated-text");
-        generatedText.value = "Finding result...";
+      const promptInput = this.shadowRoot.getElementById("prompt-input");
+      const generatedText = this.shadowRoot.getElementById("generated-text");
+      // Clear previous results
+      generatedText.value = "Finding result...";  
+      try {
         const prompt = promptInput.value;
+        if (!prompt.trim()) {
+          generatedText.value = "Please enter a valid prompt.";
+          return;
+        }
         const response = await fetch("https://api.openai.com/v1/chat/completions", {
           method: "POST",
           headers: {
@@ -95,22 +101,29 @@
           body: JSON.stringify({
             model: "gpt-4o-mini",
             messages: [
-               { role: "system", content: "You are a helpful strategic management assistant." },
-               { role: "user", content: prompt }
+              { role: "system", content: "You are a helpful strategic management assistant." },
+              { role: "user", content: prompt }
             ],
             max_tokens: parseInt(max_tokens),
             n: 1,
             temperature: 0.8
           })
-        });        
+        });    
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(`OpenAI API error: ${errorData.error.message}`);
+        }
         const data = await response.json();
         if (data.choices && data.choices.length > 0) {
           const generatedTextValue = data.choices[0].message.content;
-          const processedText = generatedTextValue.replace(/\n/g, '');
-          // Use processedText as needed
+          generatedText.value = generatedTextValue.replace(/\n/g, ''); // Remove newlines for better display
         } else {
-          console.error('No choices in response');
-        }        
+          generatedText.value = "No response received from the API.";
+        }
+        } catch (error) {
+          console.error("Error:", error.message);
+          generatedText.value = `An error occurred: ${error.message}`;
+        }
       });
     }
     onCustomWidgetBeforeUpdate(changedProperties) {
